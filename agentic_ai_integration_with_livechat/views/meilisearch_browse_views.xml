@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- MeiliSearch Product Browse Tree View -->
+        <record id="view_meilisearch_product_browse_tree" model="ir.ui.view">
+            <field name="name">meilisearch.product.browse.tree</field>
+            <field name="model">meilisearch.product.browse</field>
+            <field name="arch" type="xml">
+                <tree string="MeiliSearch Indexed Product Variants" create="false" edit="false" delete="false">
+                    <field name="meili_id"/>
+                    <field name="template_id"/>
+                    <field name="default_code"/>
+                    <field name="name_en"/>
+                    <field name="brand"/>
+                    <field name="price"/>
+                    <field name="available" widget="boolean"/>
+                    <field name="categories_combined_en"/>
+                    <field name="updated_date"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- MeiliSearch Product Browse Form View -->
+        <record id="view_meilisearch_product_browse_form" model="ir.ui.view">
+            <field name="name">meilisearch.product.browse.form</field>
+            <field name="model">meilisearch.product.browse</field>
+            <field name="arch" type="xml">
+                <form string="MeiliSearch Product Variant Details" create="false" edit="false" delete="false">
+                    <header>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name_en" readonly="1" style="font-size: 24px; font-weight: bold;"/>
+                            </h1>
+                            <h2 style="color: #666;">
+                                <field name="default_code" readonly="1"/>
+                            </h2>
+                        </div>
+                    </header>
+                    
+                    <sheet>
+                        <group>
+                            <group string="🔍 MeiliSearch Info">
+                                <field name="meili_id" readonly="1"/>
+                                <field name="template_id" readonly="1"/>
+                                <field name="is_variant" readonly="1" widget="boolean"/>
+                                <field name="variant_count" readonly="1"/>
+                                <field name="updated_date" readonly="1"/>
+                            </group>
+                            <group string="💰 Product Info">
+                                <field name="brand" readonly="1"/>
+                                <field name="price" readonly="1" widget="monetary"/>
+                                <field name="available" readonly="1" widget="boolean"/>
+                            </group>
+                        </group>
+
+                        <notebook>
+                            <page string="🌍 Multilingual Names" name="names">
+                                <group>
+                                    <group string="🇬🇧 English">
+                                        <field name="name_en" readonly="1" widget="text"/>
+                                    </group>
+                                </group>
+                                <group>
+                                    <group string="🇷🇴 Romanian">
+                                        <field name="name_ro" readonly="1" widget="text"/>
+                                    </group>
+                                </group>
+                                <group>
+                                    <group string="🇭🇺 Hungarian">
+                                        <field name="name_hu" readonly="1" widget="text"/>
+                                    </group>
+                                </group>
+                            </page>
+                            
+                            <page string="📝 Descriptions" name="descriptions">
+                                <!-- ✅ FIXED: Full width display for descriptions -->
+                                
+                                <div style="margin-bottom: 20px;">
+                                    <h3 style="color: #6f42c1; margin-bottom: 10px; border-bottom: 2px solid #6f42c1; padding-bottom: 5px;">🇬🇧 English Description</h3>
+                                    <field name="description_en" readonly="1" nolabel="1" 
+                                           style="width: 100%; display: block; white-space: pre-wrap; font-family: Georgia, serif; 
+                                                  background: #f8f9fa; padding: 20px; border: 1px solid #dee2e6; border-radius: 6px; 
+                                                  font-size: 15px; line-height: 1.7; min-height: 100px; overflow-x: auto; color: #495057;"/>
+                                </div>
+                                
+                                <div style="margin-bottom: 20px;">
+                                    <h3 style="color: #e83e8c; margin-bottom: 10px; border-bottom: 2px solid #e83e8c; padding-bottom: 5px;">🇷🇴 Romanian Description</h3>
+                                    <field name="description_ro" readonly="1" nolabel="1"
+                                           style="width: 100%; display: block; white-space: pre-wrap; font-family: Georgia, serif; 
+                                                  background: #f8f9fa; padding: 20px; border: 1px solid #dee2e6; border-radius: 6px; 
+                                                  font-size: 15px; line-height: 1.7; min-height: 100px; overflow-x: auto; color: #495057;"/>
+                                </div>
+                                
+                                <div style="margin-bottom: 20px;">
+                                    <h3 style="color: #fd7e14; margin-bottom: 10px; border-bottom: 2px solid #fd7e14; padding-bottom: 5px;">🇭🇺 Hungarian Description</h3>
+                                    <field name="description_hu" readonly="1" nolabel="1"
+                                           style="width: 100%; display: block; white-space: pre-wrap; font-family: Georgia, serif; 
+                                                  background: #f8f9fa; padding: 20px; border: 1px solid #dee2e6; border-radius: 6px; 
+                                                  font-size: 15px; line-height: 1.7; min-height: 100px; overflow-x: auto; color: #495057;"/>
+                                </div>
+                                
+                                <div class="alert alert-success" role="alert" style="margin-top: 20px;">
+                                    <strong>✅ Description Sources:</strong> Extracted from <code>description_sale</code>, <code>description</code>, 
+                                    <code>description_purchase</code>, or <code>website_description</code> fields (in priority order).
+                                </div>
+                            </page>
+                            
+                            <page string="🏷️ All Categories (Full Hierarchies)" name="all_categories">
+                                <!-- Full width display for all categories -->
+                                
+                                <div style="margin-bottom: 20px;">
+                                    <h3 style="color: #007cba; margin-bottom: 10px; border-bottom: 2px solid #007cba; padding-bottom: 5px;">🇬🇧 English Categories</h3>
+                                    <field name="categories_combined_en" readonly="1" nolabel="1" 
+                                           style="width: 100%; display: block; white-space: pre-wrap; font-family: 'Courier New', monospace; 
+                                                  background: #f8f9fa; padding: 15px; border: 1px solid #dee2e6; border-radius: 6px; 
+                                                  font-size: 14px; line-height: 1.6; min-height: 80px; overflow-x: auto;"/>
+                                </div>
+                                
+                                <div style="margin-bottom: 20px;">
+                                    <h3 style="color: #dc3545; margin-bottom: 10px; border-bottom: 2px solid #dc3545; padding-bottom: 5px;">🇷🇴 Romanian Categories</h3>
+                                    <field name="categories_combined_ro" readonly="1" nolabel="1"
+                                           style="width: 100%; display: block; white-space: pre-wrap; font-family: 'Courier New', monospace; 
+                                                  background: #f8f9fa; padding: 15px; border: 1px solid #dee2e6; border-radius: 6px; 
+                                                  font-size: 14px; line-height: 1.6; min-height: 80px; overflow-x: auto;"/>
+                                </div>
+                                
+                                <div style="margin-bottom: 20px;">
+                                    <h3 style="color: #28a745; margin-bottom: 10px; border-bottom: 2px solid #28a745; padding-bottom: 5px;">��🇺 Hungarian Categories</h3>
+                                    <field name="categories_combined_hu" readonly="1" nolabel="1"
+                                           style="width: 100%; display: block; white-space: pre-wrap; font-family: 'Courier New', monospace; 
+                                                  background: #f8f9fa; padding: 15px; border: 1px solid #dee2e6; border-radius: 6px; 
+                                                  font-size: 14px; line-height: 1.6; min-height: 80px; overflow-x: auto;"/>
+                                </div>
+                            </page>
+                            
+                            <page string="🏷️ Legacy Single Categories" name="legacy_categories">
+                                <!-- Full width display for legacy categories -->
+                                
+                                <div class="alert alert-info" role="alert" style="margin-bottom: 25px;">
+                                    <strong>ℹ️ Legacy Fields:</strong> These show only the FIRST category for backward compatibility and simple filtering.
+                                </div>
+                                
+                                <div style="margin-bottom: 20px;">
+                                    <h3 style="color: #6c757d; margin-bottom: 10px; border-bottom: 2px solid #6c757d; padding-bottom: 5px;">🇬🇧 First English Category</h3>
+                                    <field name="category_name_en" readonly="1" nolabel="1"
+                                           style="width: 100%; display: block; font-family: 'Courier New', monospace; 
+                                                  background: #f1f3f4; padding: 15px; border: 1px solid #dadce0; border-radius: 6px; 
+                                                  font-size: 14px; line-height: 1.6; min-height: 50px; color: #5f6368;"/>
+                                </div>
+                                
+                                <div style="margin-bottom: 20px;">
+                                    <h3 style="color: #6c757d; margin-bottom: 10px; border-bottom: 2px solid #6c757d; padding-bottom: 5px;">🇷🇴 First Romanian Category</h3>
+                                    <field name="category_name_ro" readonly="1" nolabel="1"
+                                           style="width: 100%; display: block; font-family: 'Courier New', monospace; 
+                                                  background: #f1f3f4; padding: 15px; border: 1px solid #dadce0; border-radius: 6px; 
+                                                  font-size: 14px; line-height: 1.6; min-height: 50px; color: #5f6368;"/>
+                                </div>
+                                
+                                <div style="margin-bottom: 20px;">
+                                    <h3 style="color: #6c757d; margin-bottom: 10px; border-bottom: 2px solid #6c757d; padding-bottom: 5px;">🇭🇺 First Hungarian Category</h3>
+                                    <field name="category_name_hu" readonly="1" nolabel="1"
+                                           style="width: 100%; display: block; font-family: 'Courier New', monospace; 
+                                                  background: #f1f3f4; padding: 15px; border: 1px solid #dadce0; border-radius: 6px; 
+                                                  font-size: 14px; line-height: 1.6; min-height: 50px; color: #5f6368;"/>
+                                </div>
+                                
+                                <div class="alert alert-warning" role="alert" style="margin-top: 20px;">
+                                    <strong>⚠️ Note:</strong> These legacy fields contain only the FIRST category from the complete list above. 
+                                    Use for simple filtering (<code>category_id = 123</code>) or when you need just one category reference.
+                                </div>
+                            </page>
+                            
+                            <page string="🔧 Technical Data" name="technical">
+                                <group>
+                                    <group string="MeiliSearch Technical Info">
+                                        <field name="meili_id" readonly="1"/>
+                                        <field name="template_id" readonly="1"/>
+                                        <field name="default_code" readonly="1"/>
+                                        <field name="brand" readonly="1"/>
+                                        <field name="price" readonly="1"/>
+                                        <field name="available" readonly="1"/>
+                                        <field name="is_variant" readonly="1"/>
+                                        <field name="variant_count" readonly="1"/>
+                                        <field name="updated_date" readonly="1"/>
+                                    </group>
+                                </group>
+                            </page>
+                        </notebook>
+                        
+                        <!-- Static info box -->
+                        <div style="margin-top: 20px; padding: 15px; background: #d1ecf1; border: 1px solid #bee5eb; border-radius: 5px;">
+                            <h4 style="color: #0c5460; margin-bottom: 10px;">✅ Data Successfully Indexed in MeiliSearch</h4>
+                            <p style="margin-bottom: 8px;">This product variant is available for enhanced search with:</p>
+                            <ul style="margin: 0; padding-left: 20px;">
+                                <li>🔍 <strong>Intelligent search</strong> with typo tolerance</li>
+                                <li>🌍 <strong>Multilingual support</strong> (EN, RO, HU)</li>
+                                <li>🏷️ <strong>Category hierarchy search</strong></li>
+                                <li>🏷️ <strong>Multiple category matching</strong></li>
+                                <li>⚡ <strong>Fast search performance</strong></li>
+                            </ul>
+                        </div>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Action for Browse All Products -->
+        <record id="action_meilisearch_browse_all" model="ir.actions.act_window">
+            <field name="name">Browse MeiliSearch Products</field>
+            <field name="res_model">meilisearch.product.browse</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_meilisearch_product_browse_tree"/>
+            <field name="target">current</field>
+            <field name="context">{'create': False, 'edit': False, 'delete': False}</field>
+            <field name="help" type="html">
+                <p>
+                    Browse all product variants currently indexed in MeiliSearch.
+                    This shows the actual data structure used for enhanced search.
+                </p>
+                <p>
+                    <strong>Click on any row</strong> to see detailed information including:
+                </p>
+                <ul>
+                    <li>🌍 Multilingual names and descriptions</li>
+                    <li>🏷️ Complete category hierarchies</li>
+                    <li>🔧 Technical indexing details</li>
+                </ul>
+            </field>
+        </record>
+
+        <!-- View Actions -->
+        <record id="action_meilisearch_browse_tree_view" model="ir.actions.act_window.view">
+            <field name="sequence" eval="1"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="view_meilisearch_product_browse_tree"/>
+            <field name="act_window_id" ref="action_meilisearch_browse_all"/>
+        </record>
+
+        <record id="action_meilisearch_browse_form_view" model="ir.actions.act_window.view">
+            <field name="sequence" eval="2"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_meilisearch_product_browse_form"/>
+            <field name="act_window_id" ref="action_meilisearch_browse_all"/>
+        </record>
+    </data>
+</odoo>

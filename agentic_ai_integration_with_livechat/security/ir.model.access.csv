@@ -1,0 +1,15 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_agentic_ai_provider,agentic.ai.provider,model_agentic_ai_provider,base.group_user,1,1,1,1
+access_agentic_ai_model,agentic.ai.model,model_agentic_ai_model,base.group_user,1,1,1,1
+access_agentic_ai_test_wizard,agentic.ai.test.wizard,model_agentic_ai_test_wizard,base.group_user,1,1,1,1
+access_agentic_ai_tool_metadata,agentic.ai.tool.metadata,model_agentic_ai_tool_metadata,base.group_user,1,1,1,1
+access_agentic_ai_tool_sync_wizard,agentic.ai.tool.sync.wizard,model_agentic_ai_tool_sync_wizard,base.group_user,1,1,1,1
+access_agentic_ai_tool_loader_wizard,agentic.ai.tool.loader.wizard,model_agentic_ai_tool_loader_wizard,base.group_user,1,1,1,1
+access_agentic_ai_prompt_template,agentic.ai.prompt.template,model_agentic_ai_prompt_template,base.group_user,1,1,1,1
+access_agentic_ai_prompt_registry_view,agentic.ai.prompt.registry.view,model_agentic_ai_prompt_registry_view,base.group_user,1,1,1,1
+access_agentic_ai_prompt_confirm_wizard,agentic.ai.prompt.confirm.wizard,model_agentic_ai_prompt_confirm_wizard,base.group_user,1,1,1,1
+access_agentic_ai_prompt_loader_wizard,agentic.ai.prompt.loader.wizard,model_agentic_ai_prompt_loader_wizard,base.group_user,1,1,1,1
+access_agentic_ai_tool_registry_view,agentic.ai.tool.registry.view,model_agentic_ai_tool_registry_view,base.group_user,1,1,1,1
+access_agentic_ai_tool_test,agentic.ai.tool.test,model_agentic_ai_tool_test,base.group_user,1,1,1,1
+access_meilisearch_config,meilisearch.config,model_meilisearch_config,base.group_user,1,1,1,1
+access_meilisearch_product_browse,meilisearch.product.browse,model_meilisearch_product_browse,base.group_user,1,1,1,1

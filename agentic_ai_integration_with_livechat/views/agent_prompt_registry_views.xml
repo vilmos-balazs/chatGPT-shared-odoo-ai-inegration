@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Prompt Registry Tree View with Column Selector -->
+        <record id="view_agentic_ai_prompt_registry_tree" model="ir.ui.view">
+            <field name="name">agentic.ai.prompt.registry.view.tree</field>
+            <field name="model">agentic.ai.prompt.registry.view</field>
+            <field name="arch" type="xml">
+                <tree string="Registered AI Prompts" create="false" edit="false" delete="false">
+                    <button name="action_refresh_prompts" type="object" string="Refresh" class="btn-primary"/>
+                    <field name="category" invisible="1"/>
+                    <field name="code"/>
+                    <field name="name"/>
+                    <field name="description" optional="hide"/>
+                    <field name="category"/>
+                    <field name="provider_type" optional="hide"/>
+                    <field name="channel" optional="hide"/>
+                    <field name="purpose" optional="hide"/>
+                    <field name="python_class_exists" optional="hide"/>
+                    <field name="is_custom" optional="hide"/>
+                    <field name="is_active" optional="hide"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Prompt Registry Form View - SAME STYLE AS TOOL REGISTRY -->
+        <record id="view_agentic_ai_prompt_registry_form" model="ir.ui.view">
+            <field name="name">agentic.ai.prompt.registry.view.form</field>
+            <field name="model">agentic.ai.prompt.registry.view</field>
+            <field name="arch" type="xml">
+                <form string="AI Prompt Details" create="false" edit="false" delete="false">
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" readonly="1" style="display: inline-block; max-width: 70%;"/>
+                            </h1>
+                            <h2>
+                                <field name="code" readonly="1" style="color: #666; font-style: italic;"/>
+                            </h2>
+                        </div>
+                        
+                        <group>
+                            <group>
+                                <field name="category"/>
+                                <field name="provider_type"/>
+                                <field name="channel"/>
+                            </group>
+                            <group>
+                                <field name="python_class_exists"/>
+                                <field name="is_custom"/>
+                                <field name="is_active"/>
+                            </group>
+                        </group>
+
+                        <!-- Full width description -->
+                        <separator string="Description"/>
+                        <field name="description" nolabel="1" readonly="1" style="width: 100%; min-height: 60px;"/>
+
+                        <!-- Full width purpose -->
+                        <separator string="Purpose/When to Use"/>
+                        <field name="purpose" nolabel="1" readonly="1" style="width: 100%; min-height: 80px;"/>
+
+                        <!-- Full width prompt template -->
+                        <separator string="Prompt Template"/>
+                        <field name="prompt_display" nolabel="1" widget="html" style="width: 100%;"/>
+
+                        <notebook>
+                            <page string="Variables" name="variables">
+                                <field name="variables_display" nolabel="1" widget="html" style="width: 100%;"/>
+                            </page>
+                            
+                            <page string="Expected Input" name="input">
+                                <field name="expected_input" nolabel="1" readonly="1" widget="text" style="width: 100%; min-height: 80px;"/>
+                            </page>
+                            
+                            <page string="Expected Output" name="output">
+                                <field name="expected_output" nolabel="1" readonly="1" widget="text" style="width: 100%; min-height: 80px;"/>
+                            </page>
+                            
+                            <page string="Raw Template" name="raw">
+                                <field name="prompt_template" nolabel="1" readonly="1" widget="text" style="width: 100%; min-height: 120px;"/>
+                            </page>
+                            
+                            <page string="Variables JSON" name="variables_json">
+                                <field name="variables_json" nolabel="1" readonly="1" widget="text" style="width: 100%;"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Prompt Registry Search View -->
+        <record id="view_agentic_ai_prompt_registry_search" model="ir.ui.view">
+            <field name="name">agentic.ai.prompt.registry.view.search</field>
+            <field name="model">agentic.ai.prompt.registry.view</field>
+            <field name="arch" type="xml">
+                <search string="Search AI Prompts">
+                    <field name="code"/>
+                    <field name="name"/>
+                    <field name="description"/>
+                    <field name="purpose"/>
+                    <filter name="category_system" string="System Prompts" domain="[('category', '=', 'system')]"/>
+                    <filter name="category_livechat" string="Livechat Prompts" domain="[('category', '=', 'livechat')]"/>
+                    <filter name="category_internal" string="Internal Prompts" domain="[('category', '=', 'internal')]"/>
+                    <filter name="category_provider" string="Provider Prompts" domain="[('category', '=', 'provider')]"/>
+                    <filter name="python_class_exists" string="Python Class Exists" domain="[('python_class_exists', '=', True)]"/>
+                    <group expand="0" string="Group By">
+                        <filter name="group_by_category" string="Category" context="{'group_by': 'category'}"/>
+                        <filter name="group_by_provider" string="Provider" context="{'group_by': 'provider_type'}"/>
+                        <filter name="group_by_channel" string="Channel" context="{'group_by': 'channel'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- Actions -->
+        <record id="action_agentic_ai_prompt_registry_view" model="ir.actions.act_window">
+            <field name="name">Registered AI Prompts</field>
+            <field name="res_model">agentic.ai.prompt.registry.view</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{'search_default_group_by_category': 1}</field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Tool Metadata Form View -->
+        <record id="view_agentic_ai_tool_metadata_form" model="ir.ui.view">
+            <field name="name">agentic.ai.tool.metadata.form</field>
+            <field name="model">agentic.ai.tool.metadata</field>
+            <field name="arch" type="xml">
+                <form string="AI Tool Metadata">
+                    <header>
+                        <button name="action_sync_from_python" string="⚠️ Sync from Python" type="object" class="btn-warning" attrs="{'invisible': [('is_custom', '=', True)]}"/>
+                        <field name="is_active" widget="boolean_button"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" placeholder="Tool Name" style="display: inline-block; max-width: 70%;"/>
+                            </h1>
+                            <h2>
+                                <field name="code" placeholder="tool_code" readonly="1" style="color: #666; font-style: italic;"/>
+                            </h2>
+                        </div>
+                        
+                        <group>
+                            <group>
+                                <field name="category"/>
+                                <field name="sequence"/>
+                                <field name="timeout"/>
+                                <field name="requires_auth"/>
+                                <field name="is_active"/>
+                            </group>
+                            <group>
+                                <field name="ai_orchestration_priority"/>
+                                <field name="is_custom" readonly="1"/>
+                                <field name="python_class_exists" readonly="1"/>
+                                <field name="last_sync_date" attrs="{'invisible': [('is_custom', '=', True)]}"/>
+                            </group>
+                        </group>
+
+                        <!-- Full width description for both editable and readonly -->
+                        <separator string="Description"/>
+                        <field name="description" nolabel="1" placeholder="Describe what this tool does" widget="text" style="width: 100%; min-height: 60px;"/>
+
+                        <!-- Full width keywords for both editable and readonly -->
+                        <separator string="Keywords for AI Intent Detection"/>
+                        <field name="keywords" nolabel="1" placeholder="product, search, find, item, catalog, buy, purchase" style="width: 100%; min-height: 40px;"/>
+
+                        <!-- Full width AI context for both editable and readonly -->
+                        <separator string="AI Usage Context - When should AI use this tool?"/>
+                        <field name="ai_usage_context" nolabel="1" placeholder="Be specific: Use this tool when user asks about products, wants to search catalog, mentions specific items, asks about availability, pricing, or wants to browse products by category. Also use for questions like 'what do you sell', 'show me laptops', 'do you have', etc." widget="text" style="width: 100%; min-height: 80px;"/>
+
+                        <notebook>
+                            <page string="Parameters Schema" name="parameters">
+                                <field name="parameters_json" nolabel="1" widget="text" placeholder='{"query": {"type": "string", "required": true, "description": "Search query"}}' style="width: 100%;"/>
+                            </page>
+                            
+                            <page string="Usage Examples" name="examples">
+                                <field name="examples_json" nolabel="1" widget="text" placeholder='[{"input": {"query": "laptop"}, "output": {"products": [...]}, "description": "Search for laptops"}]' style="width: 100%;"/>
+                            </page>
+                            
+                            <page string="Output Format" name="output_format">
+                                <field name="output_format_json" nolabel="1" widget="text" placeholder='{"products": [{"name": "string", "price": "float"}]}' style="width: 100%;"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Tool Metadata Tree View with Column Selector -->
+        <record id="view_agentic_ai_tool_metadata_tree" model="ir.ui.view">
+            <field name="name">agentic.ai.tool.metadata.tree</field>
+            <field name="model">agentic.ai.tool.metadata</field>
+            <field name="arch" type="xml">
+                <tree string="AI Tool Metadata" decoration-muted="not is_active" decoration-info="is_custom">
+                    <button name="action_sync_all_from_python" type="object" string="⚠️ Sync All from Python" class="btn-warning"/>
+                    <field name="sequence" widget="handle"/>
+                    <field name="code"/>
+                    <field name="name"/>
+                    <field name="category"/>
+                    <field name="description" optional="hide"/>
+                    <field name="keywords" optional="hide"/>
+                    <field name="ai_usage_context" optional="hide"/>
+                    <field name="ai_orchestration_priority"/>
+                    <field name="timeout" optional="hide"/>
+                    <field name="requires_auth" optional="hide"/>
+                    <field name="python_class_exists" optional="hide"/>
+                    <field name="is_custom" optional="hide"/>
+                    <field name="is_active"/>
+                    <field name="last_sync_date" optional="hide"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Tool Metadata Search View -->
+        <record id="view_agentic_ai_tool_metadata_search" model="ir.ui.view">
+            <field name="name">agentic.ai.tool.metadata.search</field>
+            <field name="model">agentic.ai.tool.metadata</field>
+            <field name="arch" type="xml">
+                <search string="Search AI Tools">
+                    <field name="code"/>
+                    <field name="name"/>
+                    <field name="description"/>
+                    <field name="keywords"/>
+                    <field name="ai_usage_context"/>
+                    
+                    <filter name="filter_active" string="Active" domain="[('is_active', '=', True)]"/>
+                    <filter name="filter_python" string="Python Tools" domain="[('python_class_exists', '=', True)]"/>
+                    <filter name="filter_custom" string="Custom Tools" domain="[('is_custom', '=', True)]"/>
+                    <separator/>
+                    <filter name="filter_product" string="Product Tools" domain="[('category', '=', 'product')]"/>
+                    <filter name="filter_inventory" string="Inventory Tools" domain="[('category', '=', 'inventory')]"/>
+                    <filter name="filter_general" string="General Tools" domain="[('category', '=', 'general')]"/>
+                    
+                    <group expand="0" string="Group By">
+                        <filter name="group_by_category" string="Category" context="{'group_by': 'category'}"/>
+                        <filter name="group_by_python_exists" string="Python Class" context="{'group_by': 'python_class_exists'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Test Wizard Action -->
+        <record id="action_agentic_ai_test_wizard" model="ir.actions.act_window">
+            <field name="name">Test Agentic AI Agent</field>
+            <field name="res_model">agentic.ai.test.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+        <!-- Prompt Template Action -->
+        <record id="action_agentic_ai_prompt_template" model="ir.actions.act_window">
+            <field name="name">AI Prompt Templates</field>
+            <field name="res_model">agentic.ai.prompt.template</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{'search_default_filter_active': 1}</field>
+        </record>
+        
+        <!-- Root Menu -->
+        <menuitem id="menu_agentic_ai_test_root"
+                  name="Agentic AI"
+                  sequence="10"
+                  groups="base.group_user"/>
+        
+        <!-- Configuration Submenu -->
+        <menuitem id="menu_agentic_ai_config"
+                  name="Configuration"
+                  parent="menu_agentic_ai_test_root"
+                  sequence="10"/>
+                  
+        <menuitem id="menu_agentic_ai_providers"
+                  name="AI Providers"
+                  parent="menu_agentic_ai_config"
+                  sequence="1"
+                  action="action_agentic_ai_provider"/>
+
+        <menuitem id="menu_agentic_ai_models"
+                  name="AI Models"
+                  parent="menu_agentic_ai_config"
+                  sequence="2"
+                  action="action_agentic_ai_model"/>
+
+        <menuitem id="menu_meilisearch_config"
+                  name="🔍 MeiliSearch Config"
+                  parent="menu_agentic_ai_config"
+                  sequence="3"
+                  action="action_meilisearch_config"/>
+
+        <!-- Prompts Submenu -->
+        <menuitem id="menu_agentic_ai_prompts"
+                  name="Prompts and Templates"
+                  parent="menu_agentic_ai_test_root"
+                  sequence="15"/>
+
+        <menuitem id="menu_agentic_ai_prompt_templates"
+                  name="Prompt Templates (Editable)"
+                  parent="menu_agentic_ai_prompts"
+                  sequence="1"
+                  action="action_agentic_ai_prompt_template"/>
+
+        <menuitem id="menu_agentic_ai_prompt_registry"
+                  name="Prompt Registry (View Only)"
+                  parent="menu_agentic_ai_prompts"
+                  sequence="2"
+                  action="action_agentic_ai_prompt_registry_view"/>
+
+        <menuitem id="menu_agentic_ai_load_prompts"
+                  name="🔍 Load New Prompts"
+                  parent="menu_agentic_ai_prompts"
+                  sequence="3"
+                  action="action_agentic_ai_prompt_loader_wizard"/>
+
+        <!-- Tools Submenu -->
+        <menuitem id="menu_agentic_ai_tools"
+                  name="Tools and Integration"
+                  parent="menu_agentic_ai_test_root"
+                  sequence="20"/>
+
+        <menuitem id="menu_agentic_ai_tool_metadata"
+                  name="Tool Metadata (Editable)"
+                  parent="menu_agentic_ai_tools"
+                  sequence="1"
+                  action="action_agentic_ai_tool_metadata"/>
+
+        <menuitem id="menu_agentic_ai_tool_registry"
+                  name="Tool Registry (View Only)"
+                  parent="menu_agentic_ai_tools"
+                  sequence="2"
+                  action="action_agentic_ai_tool_registry_view"/>
+
+        <menuitem id="menu_agentic_ai_load_tools"
+                  name="🔍 Load New Tools"
+                  parent="menu_agentic_ai_tools"
+                  sequence="3"
+                  action="action_agentic_ai_tool_loader_wizard"/>
+
+        <menuitem id="menu_agentic_ai_tool_test"
+                  name="Test Individual Tools"
+                  parent="menu_agentic_ai_tools"
+                  sequence="4"
+                  action="action_agentic_ai_tool_test"/>
+
+        <!-- Testing Submenu -->
+        <menuitem id="menu_agentic_ai_testing"
+                  name="Testing"
+                  parent="menu_agentic_ai_test_root"
+                  sequence="30"/>
+                  
+        <menuitem id="menu_agentic_ai_test_wizard"
+                  name="Test Full Agent"
+                  parent="menu_agentic_ai_testing"
+                  sequence="1"
+                  action="action_agentic_ai_test_wizard"/>
+    </data>
+</odoo>

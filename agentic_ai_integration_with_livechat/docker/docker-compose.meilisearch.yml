@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  meilisearch:
+    image: getmeili/meilisearch:v1.5
+    container_name: odoo_meilisearch
+    ports:
+      - "7700:7700"
+    environment:
+      - MEILI_ENV=development
+      - MEILI_MASTER_KEY=your-secret-master-key-change-this
+      - MEILI_HTTP_ADDR=0.0.0.0:7700
+    volumes:
+      - meilisearch_data:/meili_data
+    restart: unless-stopped
+    networks:
+      - odoo_network
+
+volumes:
+  meilisearch_data:
+    driver: local
+
+networks:
+  odoo_network:
+    external: true  # Assuming your Odoo uses this network

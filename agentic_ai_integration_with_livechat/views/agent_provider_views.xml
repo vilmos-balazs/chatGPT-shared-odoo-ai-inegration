@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- AI Model Views -->
+        <record id="view_agentic_ai_model_form" model="ir.ui.view">
+            <field name="name">agentic.ai.model.form</field>
+            <field name="model">agentic.ai.model</field>
+            <field name="arch" type="xml">
+                <form string="AI Model">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name" placeholder="e.g., llama3, gpt-4"/>
+                                <field name="display_name" placeholder="e.g., Llama 3, GPT-4"/>
+                                <field name="provider_type"/>
+                            </group>
+                            <group>
+                                <field name="is_active"/>
+                            </group>
+                        </group>
+                        <group string="Description">
+                            <field name="description" nolabel="1"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_agentic_ai_model_tree" model="ir.ui.view">
+            <field name="name">agentic.ai.model.tree</field>
+            <field name="model">agentic.ai.model</field>
+            <field name="arch" type="xml">
+                <tree string="AI Models">
+                    <field name="provider_type"/>
+                    <field name="name"/>
+                    <field name="display_name"/>
+                    <field name="is_active"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="action_agentic_ai_model" model="ir.actions.act_window">
+            <field name="name">AI Models</field>
+            <field name="res_model">agentic.ai.model</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <!-- Provider Form View -->
+        <record id="view_agentic_ai_provider_form" model="ir.ui.view">
+            <field name="name">agentic.ai.provider.form</field>
+            <field name="model">agentic.ai.provider</field>
+            <field name="arch" type="xml">
+                <form string="AI Provider">
+                    <header>
+                        <button name="test_connection" string="Test Connection" type="object" class="btn-primary"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="toggle_active" type="object" class="oe_stat_button" icon="fa-archive">
+                                <field name="is_active" widget="boolean_button" options='{"terminology": "archive"}'/>
+                            </button>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="name"/>
+                                <field name="code"/>
+                                <field name="provider_type"/>
+                                <field name="model_name" required="1" options="{'no_create_edit': False, 'quick_create': True}" context="{'default_provider_type': provider_type}"/>
+                                <field name="is_default"/>
+                                <field name="sequence"/>
+                            </group>
+                            <group>
+                                <field name="endpoint_url"/>
+                                <field name="api_key" password="True"/>
+                                <field name="timeout"/>
+                            </group>
+                        </group>
+                        <group string="Advanced Settings">
+                            <group>
+                                <field name="temperature"/>
+                                <field name="max_tokens"/>
+                            </group>
+                        </group>
+                        <group string="Description">
+                            <field name="description" nolabel="1"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Provider Tree View -->
+        <record id="view_agentic_ai_provider_tree" model="ir.ui.view">
+            <field name="name">agentic.ai.provider.tree</field>
+            <field name="model">agentic.ai.provider</field>
+            <field name="arch" type="xml">
+                <tree string="AI Providers">
+                    <field name="sequence" widget="handle"/>
+                    <field name="name"/>
+                    <field name="provider_type"/>
+                    <field name="model_name"/>
+                    <field name="is_default"/>
+                    <field name="is_active"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Provider Action -->
+        <record id="action_agentic_ai_provider" model="ir.actions.act_window">
+            <field name="name">AI Providers</field>
+            <field name="res_model">agentic.ai.provider</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+    </data>
+</odoo>

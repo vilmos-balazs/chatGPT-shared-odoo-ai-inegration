@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- MeiliSearch Config Form View -->
+        <record id="view_meilisearch_config_form" model="ir.ui.view">
+            <field name="name">meilisearch.config.form</field>
+            <field name="model">meilisearch.config</field>
+            <field name="arch" type="xml">
+                <form string="MeiliSearch Configuration">
+                    <header>
+                        <button name="test_connection" string="🔗 Test Connection" type="object" class="btn-primary"/>
+                        <button name="setup_indexes" string="⚙️ Setup Indexes" type="object" class="btn-secondary"/>
+                        <button name="clear_meilisearch_index" string="🗑️ Clear Index" type="object" class="btn-warning" 
+                                confirm="Are you sure you want to clear the entire MeiliSearch index? This will remove all indexed products."/>
+                        <button name="browse_indexed_products" string="📦 Browse Products" type="object" class="btn-info"/>
+                        <button name="test_meilisearch_search" string="🔍 Test Search" type="object" class="btn-success"/>
+                        <button name="debug_meilisearch_info" string="🔍 Debug Info" type="object" class="btn-info"/>
+                        <field name="connection_status" widget="statusbar"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" placeholder="Configuration Name"/>
+                            </h1>
+                        </div>
+                        
+                        <group>
+                            <group string="Connection Settings">
+                                <field name="endpoint_url" placeholder="http://localhost:7700"/>
+                                <field name="api_key" password="True" placeholder="your-secret-master-key-change-this"/>
+                                <field name="is_active"/>
+                            </group>
+                            <group string="Index Configuration">
+                                <field name="products_index_name"/>
+                                <field name="categories_index_name"/>
+                                <field name="batch_size"/>
+                                <field name="auto_sync_enabled"/>
+                            </group>
+                        </group>
+                        
+                        <group string="Statistics" readonly="1">
+                            <group>
+                                <field name="last_sync_date"/>
+                                <field name="total_products_indexed"/>
+                            </group>
+                        </group>
+
+                        <div class="alert alert-info" role="alert" style="margin-top: 20px;">
+                            <h4>🚀 Quick Start Guide:</h4>
+                            <ol>
+                                <li><strong>🔗 Test Connection</strong> - Verify MeiliSearch is running</li>
+                                <li><strong>⚙️ Setup Indexes</strong> - Create the search index structure</li>
+                                <li><strong>Sync products</strong> - Use Agent Test with: <code>{"sync_type": "clear_and_full", "batch_size": 50}</code></li>
+                                <li><strong>📦 Browse Products</strong> - View indexed data</li>
+                            </ol>
+                        </div>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- MeiliSearch Config Tree View -->
+        <record id="view_meilisearch_config_tree" model="ir.ui.view">
+            <field name="name">meilisearch.config.tree</field>
+            <field name="model">meilisearch.config</field>
+            <field name="arch" type="xml">
+                <tree string="MeiliSearch Configurations">
+                    <field name="name"/>
+                    <field name="endpoint_url"/>
+                    <field name="connection_status" widget="badge"/>
+                    <field name="is_active"/>
+                    <field name="last_sync_date"/>
+                    <field name="total_products_indexed"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- MeiliSearch Config Action -->
+        <record id="action_meilisearch_config" model="ir.actions.act_window">
+            <field name="name">MeiliSearch Configuration</field>
+            <field name="res_model">meilisearch.config</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create your first MeiliSearch configuration!
+                </p>
+                <p>
+                    Configure connection to MeiliSearch server for enhanced product search.
+                </p>
+            </field>
+        </record>
+    </data>
+</odoo>

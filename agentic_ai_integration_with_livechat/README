@@ -1,0 +1,546 @@
+Acest modul reface integrarea livecht ci AI pe baza de agent.
+
+Solutia mare o voi descrie la sfarsit.
+
+Acum am asa
+
+20205-08-06  17:00
+   - Am instala website_livechat
+   Am creat acest modul in ace am facut pana acum:
+    - AI provider - tabel cu providerii si posibilitatea de a alege modelul acelui provider
+    ( chiar sa introdus un nou model)
+    - Pot testa legatura cu Provider Ai pe o optiune de meniu
+    - AM facut clase abstracte in asa fel incat sa nu repet aceasi metada la fiecare provider.
+
+2025-08-06 18:00
+   - Am o versiune inconsistenta ( are erori) dar s-a terminat cato pe claude,
+   in care am vrut sa afisez TOOLS-urile inregstrate pentru orchestrae AI.
+   
+
+2025-08-06 19:00
+  -Am rezolvat afizarea tools-urilor si testarea lor.
+   acum am o versiune care afiseaza ce este inregistrat si o pot testa. 
+  - am pus sa ca tools-ul de produse sa aduca si UoM ca sa outem afisa pretul pe unitate de masura
+  
+2025-08-06 20:00
+   -Am facut doau meniuri pentru a vedea tool-urile readonly si editabil.
+   Trebuie sa pot si edita descrierile, keywords si alte atribute, pentru ca AI va decide ce functii
+   sa apeleze in ce ordine pe baza acestor date. pentru a face fine tunning fara sa modific in cod
+   metadatele functiilor am facut aceats forma de editare.
+   - pe ecranul de editare este si un buton de sincronizare, care face ca toate customizarile facute sa fie 
+     resetate la valorile din codul sursa. asat e bun pentru ca daca stric descrierile si cuvintele cheie
+     revin oricand la valorile initiale. Atentie!!! se pierd customizarile.
+     
+2025-08-06 21:00
+
+vom implementa acum acelasi mecanims pentru toate propt-urile de ai pe care le vom folosi.
+cu asta voi relua dac claude ma opreste;
+
+the strategy to make persinstent tools metadata I want to apply to any AI prompt we will generate.
+ So during the development we will generate prompt for every ai interaction but i want these template to be displayed readonly or editable as tools metadata are. take this in account when you build any ai prompt. do we have already some prompts?
+
+Edit
+
+Architected persistent AI prompt management strategy systematically.
+10s
+
+
+
+
+
+
+
+BRILLIANT strategic thinking! 🎯 You're absolutely right - we should apply the same persistent metadata pattern to AI prompts before building more AI interactions. This is perfect architecture planning!
+
+📋 Current AI Prompts Analysis
+Let me scan what prompts we already have:
+
+✅ Existing Prompts in Codebase:
+Main Agent Prompt (agentic_agent.py):
+python
+system_prompt = (
+    f"You are an AI assistant for Odoo ERP system.\n"
+    f"Channel: {channel}\n" 
+    f"Language: {lang}\n\n"
+    f"Available tools:\n" + "\n".join(tool_descriptions) + "\n\n"
+    f"User message: {message}\n\n"
+    f"Based on the user's message and available tools, provide a helpful response."
+)
+Ollama Provider Prompt (agent_provider.py):
+python
+system_msg = f"You are a helpful AI assistant for Odoo ERP system. Available tools: {[t['code'] for t in tools] if tools else 'none'}. Language: {lang}. Be concise and helpful."
+Coming Soon Prompts (when we implement function calling):
+Function calling instruction prompts
+Tool orchestration prompts
+RAG response generation prompts
+Channel-specific prompts (livechat vs internal)
+🎯 Proposed: Persistent Prompt Template System
+Same pattern as tool metadata:
+
+✅ Define in Python - Development defaults
+✅ Load to database - Persistent storage
+✅ UI management - Edit without code changes
+✅ Sync warnings - Same confirmation system
+✅ Categorization - By use case, channel, provider
+✅ Variables/placeholders - Template engine
+Should we implement this NOW before function calling? This way:
+
+All existing prompts get manageable via UI
+New function calling prompts are managed from day one
+No refactoring needed later
+Consistent architecture throughout
+This is excellent foresight! Want to build the prompt template system first, then continue with function calling using managed prompts? 🚀
+
+ When you're back, we can populate it with existing prompts and continue with function calling using managed prompts!
+
+ 2025-08-07 11:30
+    - am implementat si modificarea prompt-urilor, dar syncronizarea cu python nu merge pe wizard, o face direct. Dar merge. voi incerca sa fac aceasi solutie cu wizard ca la tools.
+
+2025-08-07 11:40
+   - Merge din wizard, si avertizeaza ca se pierd customizarile la resincronizare.
+
+   de curatat solutia de vechiul wizard si de pus pe tools functionalitatea de load neww tools !!!!
+   sync all nu merge!!!!
+
+2025-08-07 12:00
+    Am curatat codul si acum merge. a rams sync all ca nu merge.
+
+2025-08-07 12:07
+    A ficat si sync all.
+    trebuie fixat si la tools!!!!
+
+
+2025-08-07 15:30
+    Am pus optiunes de load new tools si merge
+
+    mai trebuie facut sync all
+
+2025-08-07 16:00
+    sync all merge pe tools!!!
+    trebuie facut si pe prompts.
+
+2025-08-07 16:30
+    merge si sync all pe promt-uri.
+
+2025-08-07
+    Am implementat ca tools-urile sa fie multi limba, engleza, romana si maghiara. 
+    ele intorc nume de campuri traduse in limba in care se pune inrebarea.
+    limba este stabilita tot de AI din textul intrebarii.
+
+2025-08-07  
+    acum facem orchestrarea functiilor.
+    mecanismul functioneaza ( am avut probleme cu maximum tokens, a fost crescut de la 50 la 200)
+    Dar raspunsul pe produse este inca departe de unul inteligibil.
+
+2025-08-08
+   Am modificat ca sa ia maximum tokens din baza de date de pe provider. 
+   Era hardcodat 200.
+
+2025-08-08 15:00
+   Am schimbat arhotectura finala, pentru ca regasirea produselor nu era satisfacatoare.
+   Voi instroduce inca un layer de basa de date care are cautari mai flexibile.
+   voi incarac acesta basa de date din ODOO, odata pe zi, si o voi folosi pentru a gasii product_id si category_id
+   pe care sa le dau AI.
+
+   strategia noua este:
+
+📋 COMPLETE CONTEXT RECAP: Agentic AI Integration with MeiliSearch Enhancement
+🏗️ Current Architecture (Odoo 16 CE)
+Module: agentic_ai_integration_with_livechat
+✅ Implemented & Working:
+
+🤖 Multi-Provider AI: Ollama, OpenAI, Claude, Gemini with factory pattern
+🛠️ Tool Registry: Python-defined tools with persistent database metadata
+📝 Prompt Templates: Database-editable prompts with Python fallbacks
+⚡ Function Calling Engine: Parses AI responses, orchestrates tool execution
+🌍 Multilingual Support: Romanian, Hungarian, English via native Odoo translation
+🔒 Channel Security: Livechat (business-only) vs Internal (unrestricted)
+🔄 Smart Sync: Load new tools/prompts, sync all with confirmation wizards
+
+📊 Database-Driven Configuration:
+
+Providers: max_tokens, temperature, endpoint_url - all editable via forms
+Tools: keywords, ai_usage_context, priority - customizable without code
+Prompts: Template content fully editable - changes effective immediately
+
+
+🚨 Core Issues Identified:
+1. Product Search Quality (30% success rate)
+
+❌ Basic SQL ILIKE: Poor relevance, no ranking
+❌ No typo tolerance: "zowohom" → 0 results
+❌ Wrong category table: Uses product.template.categ_id instead of product.public.category (website categories)
+❌ No multilingual intelligence: Romanian query → English-only results
+❌ No semantic understanding: "lac parchet" doesn't find parquet finishes
+
+2. Token Limit Bug (FIXED)
+
+Issue: Function calling hardcoded to 200 tokens despite provider setting 1000+
+Fix: Now uses self.provider_record.max_tokens (database-driven)
+Hardware: RTX 4070 Ti + Qwen2.5:7b (32K context) → Can handle 2,500+ tokens safely
+
+
+🎯 Proposed Solution: MeiliSearch Integration
+🔧 Architecture Enhancement:
+User Query → AI Agent (language detection + intent) → Enhanced Search Tools → MeiliSearch (fast, intelligent search) → Ranked product_ids → Odoo (full records) → AI Agent (natural response formatting) → User
+🏆 Why MeiliSearch:
+
+✅ Multilingual analyzers: Romanian, Hungarian, English built-in
+✅ Typo tolerance: Advanced fuzzy matching
+✅ Fast setup: Docker container alongside Odoo
+✅ E-commerce ready: Facets, filters, ranking rules
+✅ Self-hosted: Full control, no vendor lock-in
+✅ Tool-pattern friendly: Perfect fit for existing architecture
+
+
+🛠️ Implementation Plan:
+1. MeiliSearch Setup:
+
+Docker container with proper configuration
+Index settings: Multilingual searchable fields, synonyms, ranking rules
+Synonym mapping: "lac" = "vopsea" = "paint" = "festék"
+
+2. New Tools in Registry:
+pythonmeilisearch_sync_tool           # Odoo JSONB → MeiliSearch flattened format
+meilisearch_product_search_tool # Replaces current ProductSearchTool  
+meilisearch_category_search_tool # Uses product.public.category
+meilisearch_queue_processor     # Real-time sync triggers
+3. Data Transformation:
+Odoo JSONB: {"en_US": "Paint", "ro_RO": "Lac", "hu_HU": "Festék"}
+MeiliSearch: {"name_en": "Paint", "name_ro": "Lac", "name_hu": "Festék"}
+4. Enhanced Search Logic:
+
+Multi-stage: Category detection → Exact phrase → Multi-keyword → Fuzzy → Description
+Intelligent ranking: Exact match + category relevance + brand recognition + availability
+Context-aware: "lac parchet" → Prioritize parquet-specific products
+
+
+📈 Expected Quality Improvements:
+Search Quality: 30% → 85%+
+
+✅ Typo tolerance: "zowohom" → finds "ZowoHome"
+✅ Semantic matching: "lac parchet" → parquet finishes
+✅ Proper categories: Website categories (product.public.category)
+✅ Multilingual intelligence: Romanian queries → Romanian results
+
+Response Quality: 40% → 90%+
+
+✅ Relevant results: MeiliSearch ranked results
+✅ Natural flow: AI still handles conversation
+✅ Performance: 10x faster (5-15ms vs 200-500ms)
+
+Concrete Example:
+Query: "aveti lac zowohome mat pentru parchet?"
+Current: Confusing, irrelevant products
+New: "Am găsit 3 lacuri ZowoHome mate pentru parchet: 1) ZowoHome 8400 Mat Parchet - 45 RON/L, în stoc..."
+
+🎯 Key Architectural Principles Maintained:
+
+✅ Database-driven: All configuration via forms, no code changes needed
+✅ Tool-based: MeiliSearch integrated as enhanced tools in existing registry
+✅ AI-orchestrated: AI remains central intelligence layer
+✅ Provider-agnostic: Works with any AI provider (Ollama, OpenAI, etc.)
+✅ Multilingual-native: Leverages Odoo's translation system + MeiliSearch analyzers
+
+
+🚀 Next Steps:
+
+Implement MeiliSearch sync tools with JSONB flattening
+Replace ProductSearchTool with enhanced MeiliSearch version
+Add category search using product.public.category
+Configure real-time sync triggers
+Test with increased token limits (2,500+ tokens)
+
+Expected Outcome: 200-300% improvement in search quality and response intelligence while maintaining the elegant, database-driven, AI-orchestrated architecture.
+
+2025-08-08 15:15 
+
+Incep acum!!!!
+
+inastalare meiliseach in docker continaer langa odoo:
+
+      sudo docker run -d \
+      --name odoo_meilisearch \
+      -p 7700:7700 \
+      -e MEILI_ENV=development \
+      -e MEILI_MASTER_KEY=your-secret-master-key-change-this \
+      -e MEILI_HTTP_ADDR=0.0.0.0:7700 \
+      -v meilisearch_data:/meili_data \
+      --restart unless-stopped \
+      getmeili/meilisearch:v1.5
+
+   test ca e ok:
+      curl http://localhost:7700/health
+      # or
+      sudo docker ps | grep meilisearch
+
+
+   Create MeiliSearch Configuration
+         Click Agentic AI → Configuration → 🔍 MeiliSearch Config
+         Click Create
+         Fill in the form:
+
+         Configuration Name: Default MeiliSearch
+         MeiliSearch Endpoint: http://localhost:7700
+         Master Key: your-secret-master-key-change-this
+         Active: ✓ checked
+         Products Index Name: products (default)
+         Categories Index Name: categories (default)
+         Sync Batch Size: 50
+         Auto Sync on Product Changes: ✓ checked
+
+
+
+      Step 2: Test Connection
+         Click the 🔗 Test Connection button
+         You should see: ✅ MeiliSearch connection successful!
+
+      Tool to Test: MeiliSearch Sync Tool (meili_sync)
+      Parameters: {"sync_type": "full", "batch_size": 10}
+      Click Test Tool
+
+      Setup Indexes
+         Now click the ⚙️ Setup Indexes button to configure the search indexes.
+         You should see: ✅ MeiliSearch indexes created and configured successfully!
+
+
+   2025-08-08 16:00
+      A terminat instalarea containerului cu meilisearch
+      - am configurat
+      - am creat indexuri.
+      - am syncronizat 5 produse
+      - le-am vazut in browse in meilisearch.
+      Browse Poducts in confil meiliseach afiseaza 1500 de randuri(in loc de 20 cat afisa inainte)
+
+   2025-08-06 00:15
+      - am facut ca in meilisearch sa se incarce variantele de produs nu template-ul cum era inainte.
+      Acum incarca numele complet al variantei!!!
+      - am facut ca si categoria sa fie luata din ecommerce category nu din product category.
+      - pe un template sunt mai multe category si le aduce pe toate cu toata ierarhia lor
+        ex: 
+            743.7 EVA Hotmelt wrapping adhesives - 20 kg  TEMPLATE HAS 5 ecommerce categories: 
+               1. KLEIBERIT - Adhesives / Industry Sectors / Carpenter 
+               2. KLEIBERIT - Adhesives / Industry Sectors / Interior construction 
+               3. KLEIBERIT - Adhesives / Industry Sectors / Windows & Doors 
+               4. KLEIBERIT - Adhesives / Products Type / Hot melt Adhesives  
+               5. KLEIBERIT - Adhesives / Wrapping adhesives / Interior (HDF,MDF,PVC -Renolit 2D)
+      - am facut si un form ca sa arate toate campurile pe un articol. este apelat cand pe tree view se face
+        click pe un rand!!!
+
+   2025-08-09 2:00
+      - dubleaza articole in baza de date extrasa
+      - descrierea nu este incarcata in baza de date
+      - data actualizari este aiurea (are si anul 2024)
+
+    REZOLVATE SI ASTEA!
+
+    Nu e rezolvata cautarea din doo in baza de date!!!!
+
+    am facut cautare manuala, dar nu avea index, deci no pot cauta.
+
+    Pentru a face un index se ruleaza asta:
+
+            🔧 Make Categories Fields Searchable
+         The error shows that categories_combined_en is not in the searchable attributes. You need to update the MeiliSearch index settings.
+         Option 1: Update Settings via Curl (Quick Fix):
+         curl -H "Authorization: Bearer your-secret-master-key-change-this" \
+            -H "Content-Type: application/json" \
+            -X PATCH "http://localhost:7700/indexes/products/settings" \
+            -d '{
+               "searchableAttributes": [
+                  "name_en", "name_ro", "name_hu",
+                  "description_en", "description_ro", "description_hu", 
+                  "default_code", "brand",
+                  "categories_combined_en", "categories_combined_ro", "categories_combined_hu"
+               ]
+            }'
+         Option 2: Check Current Settings First:
+         curl -H "Authorization: Bearer your-secret-master-key-change-this" \
+            -X GET "http://localhost:7700/indexes/products/settings" | jq .
+         Option 3: Update Only Searchable Attributes:
+         curl -H "Authorization: Bearer your-secret-master-key-change-this" \
+            -H "Content-Type: application/json" \
+            -X PATCH "http://localhost:7700/indexes/products/settings/searchable-attributes" \
+            -d '["name_en", "name_ro", "name_hu", "description_en", "description_ro", "description_hu", "default_code", "brand", "categories_combined_en", "categories_combined_ro", "categories_combined_hu"]'
+         Option 4: Reset to Default (All Fields Searchable):
+         curl -H "Authorization: Bearer your-secret-master-key-change-this" \
+            -H "Content-Type: application/json" \
+            -X DELETE "http://localhost:7700/indexes/products/settings/searchable-attributes"
+         Option 5: Use Odoo Setup Method:
+         In Odoo, go to your MeiliSearch config and click "⚙️ Setup Indexes" button again.
+         ✅ After Updating Settings, Test Again:
+         bash# Wait a few seconds for settings to update, then test:
+         curl -H "Authorization: Bearer your-secret-master-key-change-this" \
+            -H "Content-Type: application/json" \
+            -X POST "http://localhost:7700/indexes/products/search" \
+            -d '{"q": "Carpenter", "limit": 10, "attributesToSearchOn": ["categories_combined_en", "categories_combined_ro", "categories_combined_hu"]}' | jq .
+         🔍 Check What Fields Actually Exist in Your Data:
+         bash# Get a sample document to see available fields:
+         curl -H "Authorization: Bearer your-secret-master-key-change-this" \
+            -X GET "http://localhost:7700/indexes/products/documents?limit=1" | jq .
+         Try Option 1 first - it should make the categories fields searchable immediately! 🎯
+
+   Exemple de cuatari:
+
+      Search ONLY in Categories (All Languages):
+      curl -H "Authorization: Bearer your-secret-master-key-change-this" \
+         -H "Content-Type: application/json" \
+         -X POST "http://localhost:7700/indexes/products/search" \
+         -d '{"q": "KLEIBERIT", "limit": 5, "attributesToSearchOn": ["categories_combined_en", "categories_combined_ro", "categories_combined_hu"]}' | jq .
+      🔍 Search ONLY in English Categories:
+      curl -H "Authorization: Bearer your-secret-master-key-change-this" \
+         -H "Content-Type: application/json" \
+         -X POST "http://localhost:7700/indexes/products/search" \
+         -d '{"q": "Hot melt Adhesives", "limit": 5, "attributesToSearchOn": ["categories_combined_en"]}' | jq .
+      🔍 Search ONLY in Romanian Categories:
+      curl -H "Authorization: Bearer your-secret-master-key-change-this" \
+         -H "Content-Type: application/json" \
+         -X POST "http://localhost:7700/indexes/products/search" \
+         -d '{"q": "Adezivi", "limit": 5, "attributesToSearchOn": ["categories_combined_ro"]}' | jq .
+      🔍 Category Search Examples:
+      bash# Search for Carpenter category
+      curl -H "Authorization: Bearer your-secret-master-key-change-this" \
+         -H "Content-Type: application/json" \
+         -X POST "http://localhost:7700/indexes/products/search" \
+         -d '{"q": "Carpenter", "limit": 10, "attributesToSearchOn": ["categories_combined_en", "categories_combined_ro", "categories_combined_hu"]}' | jq .
+
+      # Search for Interior construction
+      curl -H "Authorization: Bearer your-secret-master-key-change-this" \
+         -H "Content-Type: application/json" \
+         -X POST "http://localhost:7700/indexes/products/search" \
+         -d '{"q": "Interior construction", "limit": 10, "attributesToSearchOn": ["categories_combined_en", "categories_combined_ro", "categories_combined_hu"]}' | jq .
+
+      # Search for Windows & Doors
+      curl -H "Authorization: Bearer your-secret-master-key-change-this" \
+         -H "Content-Type: application/json" \
+         -X POST "http://localhost:7700/indexes/products/search" \
+         -d '{"q": "Windows", "limit": 10, "attributesToSearchOn": ["categories_combined_en", "categories_combined_ro", "categories_combined_hu"]}' | jq .
+
+      # Search for Wrapping adhesives
+      curl -H "Authorization: Bearer your-secret-master-key-change-this" \
+         -H "Content-Type: application/json" \
+         -X POST "http://localhost:7700/indexes/products/search" \
+         -d '{"q": "Wrapping adhesives", "limit": 10, "attributesToSearchOn": ["categories_combined_en", "categ
+
+      # search in romanian name:
+         curl -H "Authorization: Bearer your-secret-master-key-change-this"          -H "Content-Type: application/json"          -X POST "http://localhost:7700/indexes/products/search"          -d '{"q": "Antrachite", "limit": 5, "attributesToSearchOn": ["name_ro"]}' | jq .
+
+      🔍 Search for "Antracite" AND "660" in Romanian Names
+      Search for Both Words (AND logic):
+      curl -H "Authorization: Bearer your-secret-master-key-change-this" \
+         -H "Content-Type: application/json" \
+         -X POST "http://localhost:7700/indexes/products/search" \
+         -d '{"q": "Antracite 660", "limit": 10, "attributesToSearchOn": ["name_ro"]}' | jq .
+      Alternative with Quotes (Exact Phrase):
+      curl -H "Authorization: Bearer your-secret-master-key-change-this" \
+         -H "Content-Type: application/json" \
+         -X POST "http://localhost:7700/indexes/products/search" \
+         -d '{"q": "\"Antracite 660\"", "limit": 10, "attributesToSearchOn": ["name_ro"]}' | jq .
+      Search with Highlighting to See Matches:
+      curl -H "Authorization: Bearer your-secret-master-key-change-this" \
+         -H "Content-Type: application/json" \
+         -X POST "http://localhost:7700/indexes/products/search" \
+         -d '{"q": "Antracite 660", "limit": 10, "attributesToSearchOn": ["name_ro"], "attributesToHighlight": ["name_ro"]}' | jq .
+      Search for Either Word (OR logic):
+      If you want products that have EITHER "Antracite" OR "660":
+      curl -H "Authorization: Bearer your-secret-master-key-change-this" \
+         -H "Content-Type: application/json" \
+         -X POST "http://localhost:7700/indexes/products/search" \
+         -d '{"q": "Antracite OR 660", "limit": 10, "attributesToSearchOn": ["name_ro"]}' | jq .
+      Search Only for "Antracite":
+      curl -H "Authorization: Bearer your-secret-master-key-change-this" \
+         -H "Content-Type: application/json" \
+         -X POST "http://localhost:7700/indexes/products/search" \
+         -d '{"q": "Antracite", "limit": 10, "attributesToSearchOn": ["name_ro"]}' | jq .
+      Search Only for "660":
+      curl -H "Authorization: Bearer your-secret-master-key-change-this" \
+         -H "Content-Type: application/json" \
+         -X POST "http://localhost:7700/indexes/products/search" \
+         -d '{"q": "660", "limit": 10, "attributesToSearchOn": ["name_ro"]}' | jq .
+      🎯 How MeiliSearch Handles Multiple Words:
+
+      "Antracite 660" = Find documents containing BOTH words anywhere in name_ro
+      "\"Antracite 660\"" = Find exact phrase "Antracite 660"
+      "Antracite OR 660" = Find documents with EITHER word
+      Words can be in any order and anywhere in the field
+
+
+   📋 Control Which Fields to Return
+   Use the attributesToRetrieve parameter to specify exactly which fields you want in the response:
+         Return Only Specific Fields:
+         curl -H "Authorization: Bearer your-secret-master-key-change-this" \
+            -H "Content-Type: application/json" \
+            -X POST "http://localhost:7700/indexes/products/search" \
+            -d '{"q": "Antracite 660", "limit": 5, "attributesToSearchOn": ["name_ro"], "attributesToRetrieve": ["id", "name_ro", "default_code", "price"]}' | jq .
+         Return Only Names and ID:
+         curl -H "Authorization: Bearer your-secret-master-key-change-this" \
+            -H "Content-Type: application/json" \
+            -X POST "http://localhost:7700/indexes/products/search" \
+            -d '{"q": "KLEIBERIT", "limit": 5, "attributesToRetrieve": ["id", "name_en", "name_ro",
+
+2025-08-09 14:00
+   - Am modificat provider ca ca test connection sa intoarca o notificare.
+   - Am facut functii pentru a construi apelul la meilisearch pentru produse si category.
+   - Am testat si merge.
+
+
+   Inca nu merge full test incluzind AI pentru ca nu dermina bine limba!!!
+
+   - Am modificat ca sa pot inactiva tools-urile ( vreau sa inactivez vechile tools-uri pentru ca lucreaza cu ele). Vreau sa ma bazez numai pe meiliseach!
+   - Am depanat Prompt-ul pentru product_search_main ca sa apeleze functiile din meiliseach!!!!
+   - Am testat si a raspuns perfect la: 
+        "aveti lac zowohome mat pentru parchet?"
+        raspuns:
+         Am găsit 10 produse: 1. ZowoHome 8400- lac interior si parchet -mat (Laquire Package: Bidon 5 L) - 53.0 RON 2. ZowoHome 8400- lac interior si parchet -mat (Laquire Package: Bidon 10 L) - 53.0 RON 3. ZowoHome 8400- lac interior si parchet -mat (Laquire Package: BIdon 20 L) - 53.0 RON 
+
+2025-08-09 15:00
+   - Am modificat test full ai ca sa afiseze raspunsul in forma pe toata latimea ecranului!
+   - AM modiificat ca promt-ul pentru product_search_main sa fie aceslai in poyton ca si in baza de date.
+     ( am facut inainte modificari in baza de date si nu ar fi fost puse pe productie fara acesta modificare)
+
+2025-08-09 15:30
+   - let's implement enhanced intent detection with multi-keyword extraction
+     sa transmita toate substantivele si adjectivele la search engine ca paramentru pentru a cauta
+     dupa cuvinte ca pardoseala, parchet, lac, rosu... etc.
+
+   - detectarea limbii sa se faca numai de AI, sa nu fie functii care o fac pe baza de cuvinte cheie
+     am sters acele functii.
+
+     NU VREA SA MEARGA!!!! Limab tot nu e detectata cum trebuie!!!!!
+
+2025-08-10 8:00
+   -Am corectat detectarea de limba sa fie exclusiv in AI.
+   Merge si intoarce corect acum limba!  DAR prompt-ul pentru limba este HARDCODAT in PYTHON, nu se vede in baza de date!!!!
+
+2025-08-10 8:30
+   - Am corectat sa nu mai fie hardcodat, detectia de limba est OK acum!  
+
+20205-08-10 9:00
+    _lucrez la:
+       - multisearch keywords
+       - multisearch tools for meilisearch!!!
+       - AI extrage cuvintele cheie din intrebare:
+          Exemplu:
+            Input: 
+               "Am un proiect de pardoseala acasa la mine. 
+               Ce lac recomanzi in bucatarie ca sa reziste la apa?"
+            Procecss:
+            AI Extraction → 
+               {"objects": ["pardoseala", "lac"], 
+               "properties": ["reziste", "apa"], 
+               "rooms": ["bucatarie"], 
+               "actions": ["recomanzi"], 
+               "context": ["proiect", "acasa"], "intent": "recommendation"}
+
+
+2025-08-10 8:45
+   Merge extragere ape chei multiple!!!
+   dar claude zice:
+    BUT: It's using the OLD tool instead of the NEW AI-powered workflow
+
+   O vam fixa in urmatoarea versiune.
+
+
+   
+
+Mai sunt cuvinte cheie in cod, Ce sunt alea!!!!

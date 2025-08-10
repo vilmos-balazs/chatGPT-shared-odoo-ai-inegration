@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Ollama AI Models -->
+        <record id="model_llama3" model="agentic.ai.model">
+            <field name="name">llama3</field>
+            <field name="display_name">Llama 3</field>
+            <field name="provider_type">ollama</field>
+            <field name="description">Meta's Llama 3 model</field>
+        </record>
+
+        <record id="model_llama3_8b" model="agentic.ai.model">
+            <field name="name">llama3:8b</field>
+            <field name="display_name">Llama 3 8B</field>
+            <field name="provider_type">ollama</field>
+            <field name="description">Meta's Llama 3 8B parameter model</field>
+        </record>
+
+        <record id="model_mistral" model="agentic.ai.model">
+            <field name="name">mistral</field>
+            <field name="display_name">Mistral</field>
+            <field name="provider_type">ollama</field>
+            <field name="description">Mistral AI model</field>
+        </record>
+
+        <!-- OpenAI AI Models -->
+        <record id="model_gpt4" model="agentic.ai.model">
+            <field name="name">gpt-4</field>
+            <field name="display_name">GPT-4</field>
+            <field name="provider_type">openai</field>
+            <field name="description">OpenAI's GPT-4 model</field>
+        </record>
+
+        <record id="model_gpt4o" model="agentic.ai.model">
+            <field name="name">gpt-4o</field>
+            <field name="display_name">GPT-4o</field>
+            <field name="provider_type">openai</field>
+            <field name="description">OpenAI's GPT-4o model</field>
+        </record>
+
+        <!-- Claude AI Models -->
+        <record id="model_claude_sonnet" model="agentic.ai.model">
+            <field name="name">claude-3-sonnet-20240229</field>
+            <field name="display_name">Claude 3 Sonnet</field>
+            <field name="provider_type">claude</field>
+            <field name="description">Anthropic's Claude 3 Sonnet model</field>
+        </record>
+
+        <!-- Gemini AI Models -->
+        <record id="model_gemini_pro" model="agentic.ai.model">
+            <field name="name">gemini-pro</field>
+            <field name="display_name">Gemini Pro</field>
+            <field name="provider_type">gemini</field>
+            <field name="description">Google's Gemini Pro model</field>
+        </record>
+
+        <!-- Default Ollama Provider -->
+        <record id="provider_ollama_default" model="agentic.ai.provider">
+            <field name="name">Ollama (Default)</field>
+            <field name="code">ollama</field>
+            <field name="provider_type">ollama</field>
+            <field name="endpoint_url">http://192.168.100.192:11434/api/chat</field>
+            <field name="model_name" ref="model_llama3"/>
+            <field name="is_default">True</field>
+            <field name="is_active">True</field>
+            <field name="sequence">10</field>
+            <field name="description">Default Ollama provider with Llama3 model</field>
+            <field name="temperature">0.7</field>
+            <field name="max_tokens">1000</field>
+            <field name="timeout">30</field>
+        </record>
+
+        <!-- OpenAI Provider Template -->
+        <record id="provider_openai_template" model="agentic.ai.provider">
+            <field name="name">OpenAI GPT-4</field>
+            <field name="code">openai</field>
+            <field name="provider_type">openai</field>
+            <field name="endpoint_url">https://api.openai.com/v1/chat/completions</field>
+            <field name="model_name" ref="model_gpt4"/>
+            <field name="is_default">False</field>
+            <field name="is_active">False</field>
+            <field name="sequence">20</field>
+            <field name="description">OpenAI GPT-4 provider (requires API key)</field>
+            <field name="temperature">0.7</field>
+            <field name="max_tokens">1000</field>
+            <field name="timeout">30</field>
+        </record>
+    </data>
+</odoo>

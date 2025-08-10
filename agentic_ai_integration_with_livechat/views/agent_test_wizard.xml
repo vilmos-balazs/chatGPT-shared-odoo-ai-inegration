@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data>
+    <record id="view_agentic_ai_test_wizard_form" model="ir.ui.view">
+      <field name="name">agentic.ai.test.wizard.form</field>
+      <field name="model">agentic.ai.test.wizard</field>
+      <field name="arch" type="xml">
+        <form string="Test Agentic AI Agent with Function Calling">
+          <sheet>
+            <div class="oe_title">
+              <h1>🚀 Agentic AI Function Calling Test</h1>
+              <h3>Test multilingual AI with tool orchestration</h3>
+            </div>
+            
+            <group>
+              <group>
+                <field name="channel"/>
+                <field name="user_message" placeholder="e.g., 'aveti lac zowohome?' or 'show me laptops'"/>
+              </group>
+              <group>
+                <button name="action_test_agent"
+                        string="🤖 Ask Agent"
+                        type="object"
+                        class="btn-primary btn-lg"/>
+              </group>
+            </group>
+            
+            <!-- ✅ FIXED: FULL WIDTH AGENT RESPONSE -->
+            <div attrs="{'invisible': [('agent_answer', '=', False)]}" style="margin-top: 20px;">
+              <separator string="🎯 Agent Response"/>
+              <field name="agent_answer" readonly="1" nolabel="1" 
+                     style="width: 100%; display: block; font-size: 16px; background-color: #f0f8ff; 
+                            padding: 20px; border-radius: 8px; border: 2px solid #4CAF50; 
+                            font-family: Georgia, serif; line-height: 1.6; min-height: 100px; 
+                            white-space: pre-wrap; overflow-x: auto; color: #2E7D32;"/>
+            </div>
+            
+            <!-- FUNCTION CALLING SUMMARY -->
+            <div attrs="{'invisible': [('agent_answer', '=', False)]}" style="margin-top: 20px;">
+              <separator string="⚡ Function Calling Summary"/>
+              <group col="4">
+                <field name="language_detected" readonly="1"/>
+                <field name="function_calling_used" readonly="1" widget="boolean"/>
+                <field name="function_calls_made" readonly="1"/>
+                <field name="prompt_used" readonly="1"/>
+              </group>
+            </div>
+            
+            <!-- ✅ FIXED: FULL WIDTH EXECUTION DETAILS -->
+            <div attrs="{'invisible': [('execution_details', '=', False)]}" style="margin-top: 20px;">
+              <separator string="📊 Execution Details"/>
+              <field name="execution_details" readonly="1" nolabel="1" 
+                     style="width: 100%; display: block; font-family: 'Courier New', monospace; 
+                            background-color: #f8f9fa; padding: 20px; border-radius: 8px; 
+                            border: 1px solid #dee2e6; font-size: 14px; line-height: 1.5; 
+                            min-height: 120px; white-space: pre-wrap; overflow-x: auto; 
+                            color: #495057;"/>
+            </div>
+            
+            <!-- HELP SECTION -->
+            <div style="margin-top: 30px;">
+              <separator string="💡 Test Examples"/>
+              <div class="alert alert-info" style="padding: 20px; border-radius: 8px;">
+                <h4>🧪 Try these test cases:</h4>
+                <ul style="font-size: 14px; line-height: 1.6;">
+                  <li><strong>Romanian Product Search:</strong> "aveti lac zowohome mat pentru parchet?"</li>
+                  <li><strong>Hungarian Stock Check:</strong> "van laptop készleten?"</li>
+                  <li><strong>English Category Browse:</strong> "show me product categories"</li>
+                  <li><strong>Company Info:</strong> "what is your contact information?"</li>
+                  <li><strong>Mixed Language:</strong> "show me laptops cu procesor bun"</li>
+                </ul>
+                <p><strong>🎯 Enhanced Function Calling Features:</strong></p>
+                <ul style="font-size: 14px; line-height: 1.6;">
+                  <li>🌍 <strong>AI Language Detection:</strong> Automatically detects Romanian, Hungarian, English</li>
+                  <li>🛠️ <strong>Smart Tool Selection:</strong> AI chooses appropriate MeiliSearch tools based on intent</li>
+                  <li>⚡ <strong>Function Orchestration:</strong> Executes tools and integrates results naturally</li>
+                  <li>🗣️ <strong>Natural Responses:</strong> Converts tool data into conversational answers</li>
+                  <li>🔍 <strong>Enhanced Search:</strong> MeiliSearch with typo tolerance and multilingual support</li>
+                </ul>
+                
+                <div style="margin-top: 15px; padding: 15px; background: #e8f5e8; border-radius: 6px;">
+                  <strong>✅ SUCCESS EXAMPLE:</strong><br/>
+                  <em>Query:</em> "aveti lac zowohome mat pentru parchet?"<br/>
+                  <em>Expected Result:</em> "Am găsit 3 produse ZowoHome mat pentru parchet: 1) ZowoHome 8400 Mat (5L) - 53 RON..."
+                </div>
+              </div>
+            </div>
+          </sheet>
+        </form>
+      </field>
+    </record>
+  </data>
+</odoo>

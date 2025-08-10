@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+        <!-- This will automatically sync tool metadata on module install/update -->
+        <function model="agentic.ai.tool.metadata" name="sync_from_python_registry"/>
+    </data>
+</odoo>

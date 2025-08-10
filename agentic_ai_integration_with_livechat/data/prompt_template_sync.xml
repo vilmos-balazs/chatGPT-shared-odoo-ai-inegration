@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+        <!-- AUTO-LOAD PROMPTS ON FIRST INSTALL -->
+        <function model="agentic.ai.prompt.template" name="load_new_prompts_only"/>
+    </data>
+</odoo>

@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Prompt Template Form View -->
+        <record id="view_agentic_ai_prompt_template_form" model="ir.ui.view">
+            <field name="name">agentic.ai.prompt.template.form</field>
+            <field name="model">agentic.ai.prompt.template</field>
+            <field name="arch" type="xml">
+                <form string="AI Prompt Template">
+                    <header>
+                        <button name="action_sync_single_from_python" string="⚠️ Sync from Python" type="object" class="btn-warning" attrs="{'invisible': [('is_custom', '=', True)]}"/>
+                        <field name="is_active" widget="boolean_button"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" placeholder="Template Name" style="display: inline-block; max-width: 70%;"/>
+                            </h1>
+                            <h2>
+                                <field name="code" placeholder="template_code" readonly="1" style="color: #666; font-style: italic;"/>
+                            </h2>
+                        </div>
+                        
+                        <group>
+                            <group>
+                                <field name="category"/>
+                                <field name="provider_type"/>
+                                <field name="channel"/>
+                                <field name="sequence"/>
+                            </group>
+                            <group>
+                                <field name="is_custom" readonly="1"/>
+                                <field name="python_class_exists" readonly="1"/>
+                                <field name="last_sync_date"/>
+                            </group>
+                        </group>
+
+                        <separator string="Description"/>
+                        <field name="description" nolabel="1" widget="text" style="width: 100%; min-height: 60px;"/>
+
+                        <separator string="Purpose/When to Use"/>
+                        <field name="purpose" nolabel="1" widget="text" style="width: 100%; min-height: 60px;"/>
+
+                        <separator string="Prompt Template"/>
+                        <field name="prompt_template" nolabel="1" widget="text" style="width: 100%; min-height: 120px;" placeholder="You are an AI assistant. User: {user_message}"/>
+
+                        <notebook>
+                            <page string="Variables" name="variables">
+                                <field name="variables_json" nolabel="1" widget="text" placeholder='{"user_message": "string", "tools": "list", "language": "string"}' style="width: 100%;"/>
+                            </page>
+                            <page string="Expected I/O" name="expected">
+                                <group>
+                                    <field name="expected_input" widget="text" style="width: 100%; min-height: 60px;"/>
+                                    <field name="expected_output" widget="text" style="width: 100%; min-height: 60px;"/>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Prompt Template Tree View - SAME PATTERN AS WORKING TOOLS -->
+        <record id="view_agentic_ai_prompt_template_tree" model="ir.ui.view">
+            <field name="name">agentic.ai.prompt.template.tree</field>
+            <field name="model">agentic.ai.prompt.template</field>
+            <field name="arch" type="xml">
+                <tree string="AI Prompt Templates" decoration-muted="not is_active" decoration-info="is_custom">
+                    <button name="action_sync_all_from_python" type="object" string="⚠️ Sync All from Python" class="btn-warning"/>
+                    <field name="sequence" widget="handle"/>
+                    <field name="code"/>
+                    <field name="name"/>
+                    <field name="category"/>
+                    <field name="provider_type" optional="hide"/>
+                    <field name="channel" optional="hide"/>
+                    <field name="purpose" optional="hide"/>
+                    <field name="python_class_exists" optional="hide"/>
+                    <field name="is_custom" optional="hide"/>
+                    <field name="is_active"/>
+                    <field name="last_sync_date" optional="hide"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Prompt Template Search View -->
+        <record id="view_agentic_ai_prompt_template_search" model="ir.ui.view">
+            <field name="name">agentic.ai.prompt.template.search</field>
+            <field name="model">agentic.ai.prompt.template</field>
+            <field name="arch" type="xml">
+                <search string="Search Prompt Templates">
+                    <field name="code"/>
+                    <field name="name"/>
+                    <field name="description"/>
+                    <field name="purpose"/>
+                    
+                    <filter name="filter_active" string="Active" domain="[('is_active', '=', True)]"/>
+                    <filter name="filter_custom" string="Custom Templates" domain="[('is_custom', '=', True)]"/>
+                    
+                    <group expand="0" string="Group By">
+                        <filter name="group_by_category" string="Category" context="{'group_by': 'category'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+    </data>
+</odoo>

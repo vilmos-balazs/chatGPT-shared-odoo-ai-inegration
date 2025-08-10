@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Tool Metadata Action -->
+        <record id="action_agentic_ai_tool_metadata" model="ir.actions.act_window">
+            <field name="name">AI Tool Metadata</field>
+            <field name="res_model">agentic.ai.tool.metadata</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{'search_default_filter_active': 1}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create your first AI tool metadata!
+                </p>
+                <p>
+                    Define how the AI should use your tools by setting keywords,
+                    priorities, and usage context.
+                </p>
+            </field>
+        </record>
+    </data>
+</odoo>

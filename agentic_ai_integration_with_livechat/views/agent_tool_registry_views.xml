@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Tool Registry Tree View with Column Selector -->
+        <record id="view_agentic_ai_tool_registry_tree" model="ir.ui.view">
+            <field name="name">agentic.ai.tool.registry.view.tree</field>
+            <field name="model">agentic.ai.tool.registry.view</field>
+            <field name="arch" type="xml">
+                <tree string="Registered AI Tools" create="false" edit="false" delete="false">
+                    <button name="action_refresh_tools" type="object" string="Refresh" class="btn-primary"/>
+                    <field name="category" invisible="1"/>
+                    <field name="code"/>
+                    <field name="name"/>
+                    <field name="description" optional="hide"/>
+                    <field name="category"/>
+                    <field name="keywords" optional="hide"/>
+                    <field name="ai_usage_context" optional="hide"/>
+                    <field name="ai_orchestration_priority" optional="hide"/>
+                    <field name="timeout" optional="hide"/>
+                    <field name="requires_auth" optional="hide"/>
+                    <field name="python_class_exists" optional="hide"/>
+                    <field name="is_active" optional="hide"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Tool Registry Form View - SAME STYLE AS METADATA -->
+        <record id="view_agentic_ai_tool_registry_form" model="ir.ui.view">
+            <field name="name">agentic.ai.tool.registry.view.form</field>
+            <field name="model">agentic.ai.tool.registry.view</field>
+            <field name="arch" type="xml">
+                <form string="AI Tool Details" create="false" edit="false" delete="false">
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" readonly="1" style="display: inline-block; max-width: 70%;"/>
+                            </h1>
+                            <h2>
+                                <field name="code" readonly="1" style="color: #666; font-style: italic;"/>
+                            </h2>
+                        </div>
+                        
+                        <group>
+                            <group>
+                                <field name="category"/>
+                                <field name="timeout"/>
+                                <field name="requires_auth"/>
+                            </group>
+                            <group>
+                                <field name="ai_orchestration_priority"/>
+                                <field name="python_class_exists"/>
+                                <field name="is_active"/>
+                            </group>
+                        </group>
+
+                        <!-- Full width description -->
+                        <separator string="Description"/>
+                        <field name="description" nolabel="1" readonly="1" style="width: 100%; min-height: 60px;"/>
+
+                        <!-- Full width keywords -->
+                        <separator string="Keywords for AI Intent Detection"/>
+                        <field name="keywords" nolabel="1" readonly="1" style="width: 100%; min-height: 40px;"/>
+
+                        <!-- Full width AI context -->
+                        <separator string="AI Usage Context - When should AI use this tool?"/>
+                        <field name="ai_usage_context" nolabel="1" readonly="1" style="width: 100%; min-height: 80px;"/>
+
+                        <notebook>
+                            <page string="Parameters Schema" name="parameters">
+                                <field name="parameters_display" nolabel="1" widget="html" style="width: 100%;"/>
+                            </page>
+                            
+                            <page string="Usage Examples" name="examples">
+                                <field name="examples_display" nolabel="1" widget="html" style="width: 100%;"/>
+                            </page>
+                            
+                            <page string="Output Format" name="output_format">
+                                <field name="output_format_display" nolabel="1" widget="html" style="width: 100%;"/>
+                            </page>
+                            
+                            <page string="Function Schema" name="function_schema">
+                                <field name="function_schema_display" nolabel="1" widget="html" style="width: 100%;"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Tool Registry Search View -->
+        <record id="view_agentic_ai_tool_registry_search" model="ir.ui.view">
+            <field name="name">agentic.ai.tool.registry.view.search</field>
+            <field name="model">agentic.ai.tool.registry.view</field>
+            <field name="arch" type="xml">
+                <search string="Search AI Tools">
+                    <field name="code"/>
+                    <field name="name"/>
+                    <field name="description"/>
+                    <field name="keywords"/>
+                    <field name="ai_usage_context"/>
+                    <filter name="category_product" string="Product Tools" domain="[('category', '=', 'product')]"/>
+                    <filter name="category_inventory" string="Inventory Tools" domain="[('category', '=', 'inventory')]"/>
+                    <filter name="category_general" string="General Tools" domain="[('category', '=', 'general')]"/>
+                    <filter name="requires_auth" string="Requires Auth" domain="[('requires_auth', '=', True)]"/>
+                    <filter name="python_class_exists" string="Python Class Exists" domain="[('python_class_exists', '=', True)]"/>
+                    <group expand="0" string="Group By">
+                        <filter name="group_by_category" string="Category" context="{'group_by': 'category'}"/>
+                        <filter name="group_by_python_exists" string="Python Class" context="{'group_by': 'python_class_exists'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- Tool Test Form View -->
+        <record id="view_agentic_ai_tool_test_form" model="ir.ui.view">
+            <field name="name">agentic.ai.tool.test.form</field>
+            <field name="model">agentic.ai.tool.test</field>
+            <field name="arch" type="xml">
+                <form string="Test AI Tool">
+                    <sheet>
+                        <group>
+                            <field name="tool_code"/>
+                            <field name="test_status" widget="badge"/>
+                        </group>
+                        
+                        <separator string="Parameters (JSON)"/>
+                        <field name="parameters_input" nolabel="1" widget="text" placeholder='{"query": "laptop", "limit": 5}' style="width: 100%; min-height: 80px;"/>
+                        
+                        <div class="text-center mb-3">
+                            <button name="action_test_tool" string="Test Tool" type="object" class="btn-primary btn-lg"/>
+                        </div>
+                        
+                        <separator string="Test Result" attrs="{'invisible': [('test_status', '=', 'pending')]}"/>
+                        <field name="test_result" nolabel="1" widget="text" readonly="1" attrs="{'invisible': [('test_status', '=', 'pending')]}" style="width: 100%; min-height: 120px;"/>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Actions -->
+        <record id="action_agentic_ai_tool_registry_view" model="ir.actions.act_window">
+            <field name="name">Registered AI Tools</field>
+            <field name="res_model">agentic.ai.tool.registry.view</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{'search_default_group_by_category': 1}</field>
+        </record>
+
+        <record id="action_agentic_ai_tool_test" model="ir.actions.act_window">
+            <field name="name">Test AI Tools</field>
+            <field name="res_model">agentic.ai.tool.test</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+    </data>
+</odoo>
